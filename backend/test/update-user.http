@@ -1,9 +1,10 @@
-PUT http://localhost:8080/users/11
+PUT http://localhost:8080/users/10
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzY5MzQwNDEsImlhdCI6MTczNjkyNjg0MSwiaWQiOjExfQ.OagB2EB8CRuzKi0lWZB5Y2Z9OLdBDqdn6vF-L4TjDjs
 
 {
-    "name": "admin11New",
+    "name": "admin10",
     "phone": "0",
-    "email": "admin11@example.com",
+    "email": "admin10@example.com",
     "password": "admin"
 }

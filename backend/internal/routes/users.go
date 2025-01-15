@@ -39,7 +39,13 @@ func login(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "authentication complete"})
+	token, err := utils.GenerateToken(retrievedUser.ID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "authentication complete", "token": token})
 }
 
 func register(c *gin.Context) {
@@ -74,6 +80,12 @@ func updateUser(c *gin.Context) {
 		return
 	}
 
+	retrievedID := c.GetInt64("id")
+	if id != retrievedID {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "not authorized"})
+		return
+	}
+
 	retrievedUser, err := models.GetUserByID(id)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "account not found"})
@@ -99,6 +111,12 @@ func deleteUser(c *gin.Context) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"message": "could not parse param"})
+		return
+	}
+
+	retrievedID := c.GetInt64("id")
+	if id != retrievedID {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "not authorized"})
 		return
 	}
 
