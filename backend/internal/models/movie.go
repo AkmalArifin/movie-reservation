@@ -79,7 +79,7 @@ func (m *Movie) Update() error {
 
 func (m *Movie) Delete() error {
 	query := `
-		DEKETE FROM movies
+		DELETE FROM movies
 		WHERE id = $1`
 
 	_, err := db.DB.Exec(query, m.ID)
@@ -159,7 +159,7 @@ func (g *Genre) Update() error {
 
 func (g *Genre) Delete() error {
 	query := `
-		DEKETE FROM genres
+		DELETE FROM genres
 		WHERE id = $1`
 
 	_, err := db.DB.Exec(query, g.ID)
@@ -220,7 +220,7 @@ func (mg *MovieGenre) Save() error {
 
 func (mg *MovieGenre) Delete() error {
 	query := `
-		DEKETE FROM movies_genres
+		DELETE FROM movies_genres
 		WHERE movie_id = $1 AND genre_id = $2`
 
 	_, err := db.DB.Exec(query, mg.MovieID, mg.GenreID)

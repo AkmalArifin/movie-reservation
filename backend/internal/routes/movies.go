@@ -71,7 +71,7 @@ func deleteMovie(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusNotFound, gin.H{})
+	c.JSON(http.StatusNoContent, gin.H{})
 }
 
 /*** GENRES */
@@ -182,11 +182,11 @@ func deleteGenre(c *gin.Context) {
 
 	err = genre.Delete()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not delete data"})
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not delete data", "error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusNotFound, gin.H{})
+	c.JSON(http.StatusNoContent, gin.H{})
 }
 
 /*** MOVIES GENRES */
