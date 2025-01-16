@@ -5,6 +5,7 @@ import (
 
 	"github.com/AkmalArifin/movie-reservation/internal/db"
 	"github.com/AkmalArifin/movie-reservation/internal/routes"
+	"github.com/AkmalArifin/movie-reservation/internal/seed"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -20,10 +21,10 @@ func main() {
 	db.InitDB()
 
 	// SEEDING
-	// err = seed.Seeder()
-	// if err != nil {
-	// 	log.Fatal("seed not working")
-	// }
+	err = seed.Seeder()
+	if err != nil {
+		log.Fatal("seed not working", err.Error())
+	}
 
 	routes.RegisterRoutes(r)
 	r.Run(":8080")

@@ -21,7 +21,7 @@ type User struct {
 func (u *User) Save() error {
 	query := `
 		INSERT INTO users(name, phone, email, password, role, created_at, updated_at)
-		VALUES ($1, $2, $3, $4, $5, $6)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)
 		`
 
 	u.CreatedAt.SetValid(time.Now())
