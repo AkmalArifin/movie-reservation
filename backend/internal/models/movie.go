@@ -43,6 +43,8 @@ type MovieWithGenres struct {
 	UpdatedAt   null.Time   `json:"updated_at"`
 }
 
+/*** MOVIES */
+
 func (m *Movie) Save() error {
 	query := `
 		INSERT INTO movies(title, description, poster_image, price, created_at, updated_at)
@@ -62,38 +64,6 @@ func (m *Movie) Save() error {
 	return err
 }
 
-func (g *Genre) Save() error {
-	query := `
-		INSERT INTO genres(title, description, created_at, updated_at)
-		VALUES ($1, $2, $3, $4)`
-
-	g.CreatedAt.SetValid(time.Now())
-	g.UpdatedAt.SetValid(time.Now())
-
-	_, err := db.DB.Exec(query, g.Title, g.Description, g.CreatedAt, g.UpdatedAt)
-	if err != nil {
-		return err
-	}
-
-	query = `SELECT currval('genres_id_seq')`
-	err = db.DB.QueryRow(query).Scan(&g.ID)
-
-	return err
-}
-
-func (mg *MovieGenre) Save() error {
-	query := `
-		INSERT INTO movies_genres(movie_id, genre_id, created_at, updated_at)
-		VALUES ($1, $2, $3, $4)`
-
-	mg.CreatedAt.SetValid(time.Now())
-	mg.UpdatedAt.SetValid(time.Now())
-
-	_, err := db.DB.Exec(query, mg.MovieID, mg.GenreID, mg.CreatedAt, mg.UpdatedAt)
-
-	return err
-}
-
 func (m *Movie) Update() error {
 	query := `
 		UPDATE movies
@@ -107,45 +77,12 @@ func (m *Movie) Update() error {
 	return err
 }
 
-func (g *Genre) Update() error {
-	query := `
-		UPDATE genres
-		SET title = $2, description = $3, updated_at = $4
-		WWHERE id = $1`
-
-	g.UpdatedAt.SetValid(time.Now())
-
-	_, err := db.DB.Exec(query, g.ID, g.Title, g.Description, g.UpdatedAt)
-
-	return err
-}
-
 func (m *Movie) Delete() error {
 	query := `
 		DEKETE FROM movies
 		WHERE id = $1`
 
 	_, err := db.DB.Exec(query, m.ID)
-
-	return err
-}
-
-func (g *Genre) Delete() error {
-	query := `
-		DEKETE FROM genres
-		WHERE id = $1`
-
-	_, err := db.DB.Exec(query, g.ID)
-
-	return err
-}
-
-func (mg *MovieGenre) Delete() error {
-	query := `
-		DEKETE FROM movies_genres
-		WHERE movie_id = $1 AND genre_id = $2`
-
-	_, err := db.DB.Exec(query, mg.MovieID, mg.GenreID)
 
 	return err
 }
@@ -186,6 +123,50 @@ func GetMovieByID(id int64) (Movie, error) {
 	return movie, nil
 }
 
+/*** GENRES */
+
+func (g *Genre) Save() error {
+	query := `
+		INSERT INTO genres(title, description, created_at, updated_at)
+		VALUES ($1, $2, $3, $4)`
+
+	g.CreatedAt.SetValid(time.Now())
+	g.UpdatedAt.SetValid(time.Now())
+
+	_, err := db.DB.Exec(query, g.Title, g.Description, g.CreatedAt, g.UpdatedAt)
+	if err != nil {
+		return err
+	}
+
+	query = `SELECT currval('genres_id_seq')`
+	err = db.DB.QueryRow(query).Scan(&g.ID)
+
+	return err
+}
+
+func (g *Genre) Update() error {
+	query := `
+		UPDATE genres
+		SET title = $2, description = $3, updated_at = $4
+		WWHERE id = $1`
+
+	g.UpdatedAt.SetValid(time.Now())
+
+	_, err := db.DB.Exec(query, g.ID, g.Title, g.Description, g.UpdatedAt)
+
+	return err
+}
+
+func (g *Genre) Delete() error {
+	query := `
+		DEKETE FROM genres
+		WHERE id = $1`
+
+	_, err := db.DB.Exec(query, g.ID)
+
+	return err
+}
+
 func GetAllGenres() ([]Genre, error) {
 	query := `SELECT id, title, description, created_at, updated_at FROM genres`
 
@@ -210,7 +191,7 @@ func GetAllGenres() ([]Genre, error) {
 }
 
 func GetGenreByID(id int64) (Genre, error) {
-	query := `SELECT id, title, description, created_at, updated_at FROM movies WHERE id = $1`
+	query := `SELECT id, title, description, created_at, updated_at FROM genres WHERE id = $1`
 
 	var genre Genre
 	row := db.DB.QueryRow(query, id)
@@ -220,6 +201,31 @@ func GetGenreByID(id int64) (Genre, error) {
 	}
 
 	return genre, nil
+}
+
+/*** MOVIES GENRES */
+
+func (mg *MovieGenre) Save() error {
+	query := `
+		INSERT INTO movies_genres(movie_id, genre_id, created_at, updated_at)
+		VALUES ($1, $2, $3, $4)`
+
+	mg.CreatedAt.SetValid(time.Now())
+	mg.UpdatedAt.SetValid(time.Now())
+
+	_, err := db.DB.Exec(query, mg.MovieID, mg.GenreID, mg.CreatedAt, mg.UpdatedAt)
+
+	return err
+}
+
+func (mg *MovieGenre) Delete() error {
+	query := `
+		DEKETE FROM movies_genres
+		WHERE movie_id = $1 AND genre_id = $2`
+
+	_, err := db.DB.Exec(query, mg.MovieID, mg.GenreID)
+
+	return err
 }
 
 func GetAllMoviesGenres() ([]MovieGenre, error) {
