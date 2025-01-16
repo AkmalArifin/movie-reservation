@@ -8,6 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+/*** MOVIES */
+
 func getAllMovies(c *gin.Context) {
 	movies, err := models.GetAllMovies()
 	if err != nil {
@@ -33,6 +35,46 @@ func getMovieByID(c *gin.Context) {
 
 	c.JSON(http.StatusOK, movie)
 }
+
+// TODO: how to create genres movies
+func createMovie(c *gin.Context) {
+
+}
+
+// TODO: how to change genres movie
+func updateMovie(c *gin.Context) {
+
+}
+
+func deleteMovie(c *gin.Context) {
+	role := c.GetString("role")
+	if role != "admin" {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "not authorized"})
+		return
+	}
+
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "could not parse data"})
+		return
+	}
+
+	movie, err := models.GetMovieByID(id)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": "data not found"})
+		return
+	}
+
+	err = movie.Delete()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not delete data"})
+		return
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{})
+}
+
+/*** GENRES */
 
 func getAllGenres(c *gin.Context) {
 	genres, err := models.GetAllGenres()
@@ -60,21 +102,6 @@ func getGenreByID(c *gin.Context) {
 	c.JSON(http.StatusOK, genre)
 }
 
-func getAllMoviesGenres(c *gin.Context) {
-	moviesGenres, err := models.GetAllMoviesGenres()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
-		return
-	}
-
-	c.JSON(http.StatusOK, moviesGenres)
-}
-
-// TODO: how to create genres movies
-func createMovie(c *gin.Context) {
-
-}
-
 func createGenre(c *gin.Context) {
 	role := c.GetString("role")
 	if role != "admin" {
@@ -96,11 +123,6 @@ func createGenre(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusAccepted, genre)
-}
-
-// TODO: how to change genres movie
-func updateMovie(c *gin.Context) {
-
 }
 
 func updateGenre(c *gin.Context) {
@@ -139,34 +161,6 @@ func updateGenre(c *gin.Context) {
 	c.JSON(http.StatusAccepted, genre)
 }
 
-func deleteMovie(c *gin.Context) {
-	role := c.GetString("role")
-	if role != "admin" {
-		c.JSON(http.StatusUnauthorized, gin.H{"message": "not authorized"})
-		return
-	}
-
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "could not parse data"})
-		return
-	}
-
-	movie, err := models.GetMovieByID(id)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"message": "data not found"})
-		return
-	}
-
-	err = movie.Delete()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not delete data"})
-		return
-	}
-
-	c.JSON(http.StatusNotFound, gin.H{})
-}
-
 func deleteGenre(c *gin.Context) {
 	role := c.GetString("role")
 	if role != "admin" {
@@ -193,4 +187,16 @@ func deleteGenre(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusNotFound, gin.H{})
+}
+
+/*** MOVIES GENRES */
+
+func getAllMoviesGenres(c *gin.Context) {
+	moviesGenres, err := models.GetAllMoviesGenres()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not fetch data"})
+		return
+	}
+
+	c.JSON(http.StatusOK, moviesGenres)
 }
