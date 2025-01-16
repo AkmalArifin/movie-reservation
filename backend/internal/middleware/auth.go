@@ -22,12 +22,13 @@ func Authenticate(c *gin.Context) {
 		return
 	}
 
-	id, err := utils.VeryifyToken(parts[1])
+	id, role, err := utils.VeryifyToken(parts[1])
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"message": "not authorized"})
 		return
 	}
 
 	c.Set("id", id)
+	c.Set("role", role)
 	c.Next()
 }

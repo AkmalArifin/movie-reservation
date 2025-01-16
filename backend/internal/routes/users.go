@@ -39,7 +39,7 @@ func login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateToken(retrievedUser.ID)
+	token, err := utils.GenerateToken(retrievedUser.ID, retrievedUser.Role.ValueOrZero())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not generate token"})
 		return

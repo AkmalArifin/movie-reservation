@@ -16,4 +16,16 @@ func RegisterRoutes(r *gin.Engine) {
 	r.GET("/users", getAllUsers)
 	auth.PUT("/users/:id", updateUser)
 	auth.DELETE("/users/:id", deleteUser)
+
+	r.GET("/movies", getAllMovies)
+	r.GET("/genres", getAllGenres)
+	r.GET("/movies/:id", getMovieByID)
+	r.GET("/genres/:id", getGenreByID)
+	r.GET("/movies-genres", getAllMoviesGenres)
+	auth.POST("/movies", createMovie)
+	auth.POST("/genres", createGenre)
+	auth.PUT("/movies/:id", updateMovie)
+	auth.PUT("/genres/:id", updateGenre)
+	auth.DELETE("/movies/:id", deleteMovie)
+	auth.DELETE("/genres/:id", deleteGenre)
 }

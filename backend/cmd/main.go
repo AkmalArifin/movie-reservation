@@ -19,6 +19,12 @@ func main() {
 	r := gin.Default()
 	db.InitDB()
 
+	// SEEDING
+	// err = seed.Seeder()
+	// if err != nil {
+	// 	log.Fatal("seed not working")
+	// }
+
 	routes.RegisterRoutes(r)
 	r.Run(":8080")
 
