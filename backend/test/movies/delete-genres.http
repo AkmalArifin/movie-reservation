@@ -1,1 +1,2 @@
-DELETE http://localhost:8080/genres/
+DELETE http://localhost:8080/genres/4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MzcwMDU0NjksImlhdCI6MTczNjk5ODI2OSwiaWQiOjEsInJvbGUiOiJhZG1pbiJ9.4bcqmFGr4ki3MllU5-rUO7n5s9KRLD2uorbdb2DHlK8
