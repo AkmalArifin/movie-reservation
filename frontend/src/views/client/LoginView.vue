@@ -12,6 +12,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
+import axios from 'axios';
 
 const userInput = reactive({
     email: "",
@@ -19,9 +20,19 @@ const userInput = reactive({
 })
 
 async function handleLogin(event:Event) {
-    event.preventDefault()
+    event.preventDefault();
 
-    console.log(userInput)
+    const data = {
+        email: userInput.email,
+        password: userInput.password
+    };
+
+    axios.post("http://localhost:8080/login", data)
+        .then(response => {
+            console.log(response.data)
+        }).catch(error => {
+            console.log(error)
+        })
 }
 
 </script>
