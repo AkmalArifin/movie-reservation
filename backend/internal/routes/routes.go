@@ -2,10 +2,13 @@ package routes
 
 import (
 	"github.com/AkmalArifin/movie-reservation/internal/middleware"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterRoutes(r *gin.Engine) {
+	config := middleware.ConfigCORS()
+	r.Use(cors.New(config))
 
 	auth := r.Group("/")
 	auth.Use(middleware.Authenticate)
