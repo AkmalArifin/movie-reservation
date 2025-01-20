@@ -32,12 +32,11 @@ async function handleLogin(event:Event) {
         password: userInput.password
     };
 
-    await axios.post("http://localhost:8080/login", data)
+    await axios.post("http://localhost:8080/login", data, { withCredentials: true})
         .then(response => {
             const data : {
                 message: string,
-                token: string,
-                refreshToken: string
+                token: string
             } = response.data
             
             sessionStorage.setItem("token", data.token)
