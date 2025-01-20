@@ -7,10 +7,10 @@ import DashboardView from '@/views/admin/DashboardView.vue';
 
 
 const routes = [
-    { path: '/login', component: LoginView },
-    { path: '/register', component: RegisterView },
-    { path: '/admin', component: DashboardView},
-    { path: '/', component: HomeView }
+    { name: 'login', path: '/login', component: LoginView },
+    { name: 'register', path: '/register', component: RegisterView },
+    { name: 'dashboard', path: '/admin', component: DashboardView},
+    { name: 'home', path: '/', component: HomeView }
 ]
 
 const router = createRouter({
