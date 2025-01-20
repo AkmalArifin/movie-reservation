@@ -15,6 +15,7 @@ func RegisterRoutes(r *gin.Engine) {
 
 	r.POST("/login", login)
 	r.POST("/register", register)
+	r.POST("/refresh", refreshJWT)
 
 	r.GET("/users", getAllUsers)
 	auth.PUT("/users/:id", updateUser)

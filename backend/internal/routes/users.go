@@ -51,9 +51,39 @@ func login(c *gin.Context) {
 		return
 	}
 
-	maxAge := 7 * 24 * 60 * 60 * 1000
-	c.SetCookie("refreshToken", refreshToken, maxAge, "/", "", true, true)
-	c.JSON(http.StatusOK, gin.H{"message": "authentication complete", "token": jwtToken, "refreshToken": refreshToken})
+	maxAge := 7 * 24 * 60 * 60
+	c.SetCookie("refresh_token", refreshToken, maxAge, "/", "localhost", false, true)
+	c.JSON(http.StatusOK, gin.H{"message": "authentication complete", "token": jwtToken})
+}
+
+func refreshJWT(c *gin.Context) {
+	refreshToken, err := c.Cookie("refresh_token")
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": "cookie not found"})
+		return
+	}
+
+	id, role, err := utils.VeryifyToken(refreshToken)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "not authorized"})
+		return
+	}
+
+	jwtToken, err := utils.GenerateToken(id, role)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not generate token"})
+		return
+	}
+
+	newRefreshToken, err := utils.GenerateRefreshToken(id, role)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not generate token"})
+		return
+	}
+
+	maxAge := 7 * 24 * 60 * 60
+	c.SetCookie("refresh_token", newRefreshToken, maxAge, "/", "localhost", false, true)
+	c.JSON(http.StatusOK, gin.H{"token": jwtToken})
 }
 
 func register(c *gin.Context) {
