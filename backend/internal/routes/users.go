@@ -51,6 +51,8 @@ func login(c *gin.Context) {
 		return
 	}
 
+	maxAge := 7 * 24 * 60 * 60 * 1000
+	c.SetCookie("refreshToken", refreshToken, maxAge, "/", "", true, true)
 	c.JSON(http.StatusOK, gin.H{"message": "authentication complete", "token": jwtToken, "refreshToken": refreshToken})
 }
 
