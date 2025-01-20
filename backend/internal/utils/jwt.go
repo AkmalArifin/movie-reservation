@@ -15,7 +15,18 @@ func GenerateToken(id int64, role string) (string, error) {
 		"id":   id,
 		"role": role,
 		"iat":  time.Now().Unix(),
-		"exp":  time.Now().Add(2 * time.Hour).Unix(),
+		"exp":  time.Now().Add(time.Hour).Unix(),
+	})
+
+	return token.SignedString([]byte(key))
+}
+
+func GenerateRefreshToken(id int64, role string) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"id":   id,
+		"role": role,
+		"iat":  time.Now().Unix(),
+		"exp":  time.Now().Add(7 * 24 * time.Hour).Unix(),
 	})
 
 	return token.SignedString([]byte(key))

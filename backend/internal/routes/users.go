@@ -39,13 +39,19 @@ func login(c *gin.Context) {
 		return
 	}
 
-	token, err := utils.GenerateToken(retrievedUser.ID, retrievedUser.Role.ValueOrZero())
+	jwtToken, err := utils.GenerateToken(retrievedUser.ID, retrievedUser.Role.ValueOrZero())
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not generate token"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "authentication complete", "token": token})
+	refreshToken, err := utils.GenerateRefreshToken(retrievedUser.ID, retrievedUser.Role.ValueOrZero())
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": "could not generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "authentication complete", "token": jwtToken, "refreshToken": refreshToken})
 }
 
 func register(c *gin.Context) {
