@@ -1,6 +1,7 @@
 <template>
     <div>
         <h1>Dashboard View</h1>
+        <router-link :to="{name: 'movie-master'}">Movie Table</router-link>
     </div>
 </template>
 
